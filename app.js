@@ -7,17 +7,25 @@ var totalVotes = 0; // added from code review 10/13
 var productOneElement = document.getElementById('image-one');  // first product image
 var productTwoElement = document.getElementById('image-two');  // second product image
 var productThreeElement = document.getElementById('image-three');  // third product image 
-var recentRandomNumbers = [];
-var allProduct = [];
 var button = document.createElement('BUTTON');
+var allProduct = [];
+// var products = [];
+// var votes = [];
 
+var recentRandomNumbers = [];
+var maximumClicks = 5;
+// var timesProductShown = [];
+// var numberOfVotesArray = [];
+// var namesOfProductArray = [];
 
-// constructor function (Product)
-function Product(filepath, imageName) {
+// constructor function (Product objects)
+function Product(filepath, name) {
     this.filepath = filepath;  /// file path for images 
-    this.name = imageName;   /// image description
+    this.name = name;   /// image description
     this.votes = 0;  // vote counter
     this.views = 0;  // views counter // added from code review 10/13 
+    // this.numberOfTimesProductShown = numberOfTimesProductShown;
+    // this.numberOfTimesProductClicked = numberOfTimesProductClicked;
 
     allProduct.push(this);
 }
@@ -50,6 +58,7 @@ new Product('img/img/wine-glass.jpg', 'wine-glass');
 // render function
 
 function productImageRender(imageElement) {  //good
+
     var randomProductIndex = getRandomNumber(0, allProduct.length - 1);  // good
 
 
@@ -99,10 +108,12 @@ function handleClick(event) {
 
     // increment total votes
     totalVotes++;
-    if (totalVotes >= 25) {
+    if (totalVotes >= maximumClicks) {
         document.getElementById('product-container').removeEventListener('click', handleClick); //removes event listener
         // display results 
-        renderViewsButton();
+        // renderViewsButton();
+        renderChart();
+
         // ul element is the parent on html
     }
 }
@@ -126,6 +137,103 @@ function getResultsClick(event) {
 }
 
 
+
+// generate chart
+
+function makeProductChart() {
+    var products = [];
+    for (var i = 0; i < allProduct.length; i++) {
+        products.push(allProduct[i].name);
+    }
+
+    var votes = [];
+    for (var i = 0; i < allProduct.length; i++) {
+        votes.push(allProduct[i].votes);
+
+    }
+    var views = [];
+    for (var i = 0; i < allProduct.length; i++) {
+        views.push(allProduct[i].views);
+    }
+    return [products, votes, views];
+}
+
+// iterate over allProducts array and create a products name array for my labels
+// same thing but for votes go in data
+// another for views maybe
+
+//// add charts
+function renderChart() {
+
+    var chartData = makeProductChart();
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartData[0], // products go here
+            datasets: [{
+                label: '# of votes',// title
+                data: chartData[1],  // # of votes
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+}
+
 // set up event listener - image clicks
 
 document.getElementById('product-container').addEventListener('click', handleClick);
@@ -133,64 +241,7 @@ document.getElementById('product-container').addEventListener('click', handleCli
 productImageRender(productOneElement);
 productImageRender(productTwoElement);
 productImageRender(productThreeElement);
-
-
-////notes
-
-//loop over our allProducts array
-//create an li
-// fill it with content
-// append to the parent
-
-
-// iterate over allProducts array and create a products name array for my labels
-// same thing but for votes go in data
-// another for views maybe
-
-//// add charts
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// // event listener  // listen for click
-// productContainer.addEventListener('click', function (event) {
-
-//     // add view results button 
-//     // make 3 images go away and bring 3 new images in 
-//     productImageRender(productOneElement);
-//     productImageRender(productTwoElement);
-//     productImageRender(productThreeElement);
-
-    // tracking votes // loop over product array and see if title matches 
-
-    // var selectedProduct = event.target.title;
-
-    // for (var i = 0; i < allProduct.length; i++) {
-    //     if (selectedProduct === allProduct[i].name) {
-    //         console.log('increased votes for ', allProduct[i].name);
-    //         allProduct[i].votes++;
-    //     }
-    // }
-
-    // if else statement to generate count of numbers 
-
-
-    // figure out which product was clicked on and increase votes
-// })
-
-
-
-// productImageRender(productOneElement);
-// productImageRender(productTwoElement);
-// productImageRender(productThreeElement);
-
-
-
-
-
-
-
+productImageRender();
 /////////////////////////////////////////// PLAN OF ACTION ////////////////////////////////////////////////////
 
 // math.random to return a random number between 0 and rhe length of an array
@@ -224,4 +275,11 @@ productImageRender(productThreeElement);
 // keep number of rounds in a variable to allow number to be easily changed
 
 // button with view results which when clicked displays the list of products followed by votes received and number of timed seen
+
+////notes
+
+//loop over our allProducts array
+//create an li
+// fill it with content
+// append to the parent
 
