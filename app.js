@@ -1,30 +1,23 @@
 'use strict';
 
 
-// var pastProductImages = []; // holds previous 3 images
-// var currentProductImages = []; // holds your current 3 images
-
 // global variables
-// dom
-var allProduct = [];
+
+var totalVotes = 0; // added from code review 10/13
 var productOneElement = document.getElementById('image-one');  // first product image
 var productTwoElement = document.getElementById('image-two');  // second product image
 var productThreeElement = document.getElementById('image-three');  // third product image 
-var productContainer = document.getElementById('product-container');
 var recentRandomNumbers = [];
-var clickCountdown = 25; // counter for how many times the user has 
-var clicksTaken = 0;
+var allProduct = [];
 var button = document.createElement('BUTTON');
 
 
-// constructor function
+// constructor function (Product)
 function Product(filepath, imageName) {
     this.filepath = filepath;  /// file path for images 
     this.name = imageName;   /// image description
     this.votes = 0;  // vote counter
-    this.productConsidered = 0;
-
-
+    this.views = 0;  // views counter // added from code review 10/13 
 
     allProduct.push(this);
 }
@@ -51,79 +44,146 @@ new Product('img/img/usb.gif', 'usb');
 new Product('img/img/water-can.jpg', 'water-can');
 new Product('img/img/wine-glass.jpg', 'wine-glass');
 
-console.log(allProduct);
+//console.log(allProduct);
 
+
+// render function
+
+function productImageRender(imageElement) {  //good
+    var randomProductIndex = getRandomNumber(0, allProduct.length - 1);  // good
+
+
+    // this makes sure we have a unique image
+    while (recentRandomNumbers.includes(randomProductIndex)) {
+        randomProductIndex = getRandomNumber(0, allProduct.length - 1); //good
+        //console.log(randomProductIndex);
+    }
+
+    imageElement.src = allProduct[randomProductIndex].filepath;
+    imageElement.alt = allProduct[randomProductIndex].name;
+    imageElement.title = allProduct[randomProductIndex].name;
+
+    // views
+    allProduct[randomProductIndex].views++; // added 10/13
+
+    if (recentRandomNumbers.length > 5) { //  added 10/13
+        recentRandomNumbers.shift();
+    }
+
+
+}
 
 
 // helper functions////////////// find a random number within a range
 // random number function generator
 
 function getRandomNumber(min, max) {
-    // return Math.floor(Math.random() * Math.floor(max));
     return Math.floor(Math.random() * (max - min + 1) + min);
-
 }
 
-// render function
-// debugger
-function productImageRender(imageElement) {
-    console.log('our recent random numbers at beginning', recentRandomNumbers);
-    // get  =a random index between 0 and the length of all images array
-    if (recentRandomNumbers.length >= 6) {
-        recentRandomNumbers = [];
-        // console.log(recentRandomNumbers);
-    }
-
-    var randomProductIndex = getRandomNumber(0, allProduct.length - 1);  ///(take - 1 off if using other return)
-    // console.log(randomProductIndex);
-    while (recentRandomNumbers.includes(randomProductIndex)) {
-        randomProductIndex = getRandomNumber(0, allProduct.length - 1);
-        console.log(randomProductIndex);
-    }
-    // debugger
-    recentRandomNumbers.push(randomProductIndex);
-    allProduct[randomProductIndex].votes++;
-
-    imageElement.src = allProduct[randomProductIndex].filepath;
-    imageElement.alt = allProduct[randomProductIndex].name;
-    imageElement.title = allProduct[randomProductIndex].name;
-
-    // recentRandomNumbers = [];
-    //console.log('our recent random numbers at end', recentRandomNumbers);
-}
-
-
-// event listener  // listen for click
-productContainer.addEventListener('click', function (event) {
-
-    // add view results button 
-    // make 3 images go away and bring 3 new images in 
-    productImageRender(productOneElement);
-    productImageRender(productTwoElement);
-    productImageRender(productThreeElement);
-
-    // tracking votes // loop over product array and see if title matches 
-
+// click function
+function handleClick(event) {
     var selectedProduct = event.target.title;
 
     for (var i = 0; i < allProduct.length; i++) {
         if (selectedProduct === allProduct[i].name) {
-            console.log('increased votes for ', allProduct[i].name);
+            // console.log('increased votes for ', allProduct[i].name);
             allProduct[i].votes++;
         }
     }
+
+    productImageRender(productOneElement);
+    productImageRender(productTwoElement);
+    productImageRender(productThreeElement);
+
+
+    // increment total votes
+    totalVotes++;
+    if (totalVotes >= 25) {
+        document.getElementById('product-container').removeEventListener('click', handleClick); //removes event listener
+        // display results 
+        renderViewsButton();
+        // ul element is the parent on html
+    }
+}
+function renderViewsButton() {
+    button.innerHTML = 'View Results';
+    document.body.appendChild(button);
+}
+
+
+button.addEventListener('click', getResultsClick);
+function getResultsClick(event) {
+    var ulElement = document.getElementById('results');
+
+    // loop over all pictures 
+    for (var i = 0; i < allProduct.length; i++) {
+        var liElement = document.createElement('li');
+        liElement.textContent = `${allProduct[i].name} had ${allProduct[i].votes} votes and was seen ${allProduct[i].views} times.`;
+        ulElement.appendChild(liElement);
+
+    }
+}
+
+
+// set up event listener - image clicks
+
+document.getElementById('product-container').addEventListener('click', handleClick);
+
+productImageRender(productOneElement);
+productImageRender(productTwoElement);
+productImageRender(productThreeElement);
+
+
+////notes
+
+//loop over our allProducts array
+//create an li
+// fill it with content
+// append to the parent
+
+
+// iterate over allProducts array and create a products name array for my labels
+// same thing but for votes go in data
+// another for views maybe
+
+//// add charts
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// // event listener  // listen for click
+// productContainer.addEventListener('click', function (event) {
+
+//     // add view results button 
+//     // make 3 images go away and bring 3 new images in 
+//     productImageRender(productOneElement);
+//     productImageRender(productTwoElement);
+//     productImageRender(productThreeElement);
+
+    // tracking votes // loop over product array and see if title matches 
+
+    // var selectedProduct = event.target.title;
+
+    // for (var i = 0; i < allProduct.length; i++) {
+    //     if (selectedProduct === allProduct[i].name) {
+    //         console.log('increased votes for ', allProduct[i].name);
+    //         allProduct[i].votes++;
+    //     }
+    // }
 
     // if else statement to generate count of numbers 
 
 
     // figure out which product was clicked on and increase votes
-})
+// })
 
 
 
-productImageRender(productOneElement);
-productImageRender(productTwoElement);
-productImageRender(productThreeElement);
+// productImageRender(productOneElement);
+// productImageRender(productTwoElement);
+// productImageRender(productThreeElement);
 
 
 
@@ -165,29 +225,3 @@ productImageRender(productThreeElement);
 
 // button with view results which when clicked displays the list of products followed by votes received and number of timed seen
 
-
-//////////////////////////////// OLD CODE///////////////////////////////////////////////////////////////
-
- // imageTwoElement.src = allImages[randomIndex].filepath;
-    // imageTwoElement.alt = allImages[randomIndex].name;
-    // imageTwoElement.title = allImages[randomIndex].name;
-
-    // var randomIndex = getRandomNumber(0, allImages.length - 1);
-
-
-
-    // imageThreeElement.src = allImages[randomIndex].filepath;
-    // imageThreeElement.alt = allImages[randomIndex].name;
-    // imageThreeElement.title = allImages[randomIndex].name;
-
-    // var imageTwoElement = document.getElementById('image-two');
-
-    // imageTwoElement.src = 'img/img/banana.jpg';
-    // imageTwoElement.alt = 'banana';
-    // imageTwoElement.title = 'banana';
-
-    // var imageThreeElement = document.getElementById('image-three');
-
-    // imageThreeElement.src = 'img/img/bathroom.jpg';
-    // imageThreeElement.alt = 'bathroom';
-    // imageThreeElement.title = 'bathroom';
