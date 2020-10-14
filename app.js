@@ -3,29 +3,22 @@
 
 // global variables
 
-var totalVotes = 0; // added from code review 10/13
+var totalVotes = 0; // added 10/13
 var productOneElement = document.getElementById('image-one');  // first product image
 var productTwoElement = document.getElementById('image-two');  // second product image
 var productThreeElement = document.getElementById('image-three');  // third product image 
-var button = document.createElement('BUTTON');
+var button = document.createElement('BUTTON');  //views button
 var allProduct = [];
-// var products = [];
-// var votes = [];
-
 var recentRandomNumbers = [];
-var maximumClicks = 5;
-// var timesProductShown = [];
-// var numberOfVotesArray = [];
-// var namesOfProductArray = [];
+var maximumClicks = 25;  //max amount of clicks
+
 
 // constructor function (Product objects)
 function Product(filepath, name) {
     this.filepath = filepath;  /// file path for images 
     this.name = name;   /// image description
     this.votes = 0;  // vote counter
-    this.views = 0;  // views counter // added from code review 10/13 
-    // this.numberOfTimesProductShown = numberOfTimesProductShown;
-    // this.numberOfTimesProductClicked = numberOfTimesProductClicked;
+    this.views = 0;  // views counter 
 
     allProduct.push(this);
 }
@@ -52,19 +45,19 @@ new Product('img/img/usb.gif', 'usb');
 new Product('img/img/water-can.jpg', 'water-can');
 new Product('img/img/wine-glass.jpg', 'wine-glass');
 
-//console.log(allProduct);
+console.log(allProduct);
 
 
 // render function
 
-function productImageRender(imageElement) {  //good
+function productImageRender(imageElement) {  //working
 
-    var randomProductIndex = getRandomNumber(0, allProduct.length - 1);  // good
+    var randomProductIndex = getRandomNumber(0, allProduct.length - 1);  //working
 
 
     // this makes sure we have a unique image
     while (recentRandomNumbers.includes(randomProductIndex)) {
-        randomProductIndex = getRandomNumber(0, allProduct.length - 1); //good
+        randomProductIndex = getRandomNumber(0, allProduct.length - 1); //working
         //console.log(randomProductIndex);
     }
 
@@ -74,18 +67,14 @@ function productImageRender(imageElement) {  //good
 
     // views
     allProduct[randomProductIndex].views++; // added 10/13
-
+    recentRandomNumbers.push(randomProductIndex);
     if (recentRandomNumbers.length > 5) { //  added 10/13
         recentRandomNumbers.shift();
     }
 
-
 }
 
-
-// helper functions////////////// find a random number within a range
-// random number function generator
-
+// helper functions
 function getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
@@ -96,7 +85,7 @@ function handleClick(event) {
 
     for (var i = 0; i < allProduct.length; i++) {
         if (selectedProduct === allProduct[i].name) {
-            // console.log('increased votes for ', allProduct[i].name);
+
             allProduct[i].votes++;
         }
     }
@@ -110,18 +99,16 @@ function handleClick(event) {
     totalVotes++;
     if (totalVotes >= maximumClicks) {
         document.getElementById('product-container').removeEventListener('click', handleClick); //removes event listener
-        // display results 
-        // renderViewsButton();
+
         renderChart();
 
-        // ul element is the parent on html
+
     }
 }
 function renderViewsButton() {
     button.innerHTML = 'View Results';
     document.body.appendChild(button);
 }
-
 
 button.addEventListener('click', getResultsClick);
 function getResultsClick(event) {
@@ -136,10 +123,7 @@ function getResultsClick(event) {
     }
 }
 
-
-
 // generate chart
-
 function makeProductChart() {
     var products = [];
     for (var i = 0; i < allProduct.length; i++) {
@@ -158,9 +142,6 @@ function makeProductChart() {
     return [products, votes, views];
 }
 
-// iterate over allProducts array and create a products name array for my labels
-// same thing but for votes go in data
-// another for views maybe
 
 //// add charts
 function renderChart() {
@@ -173,7 +154,7 @@ function renderChart() {
         data: {
             labels: chartData[0], // products go here
             datasets: [{
-                label: '# of votes',// title
+                label: '# of votes', // title
                 data: chartData[1],  // # of votes
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -241,7 +222,9 @@ document.getElementById('product-container').addEventListener('click', handleCli
 productImageRender(productOneElement);
 productImageRender(productTwoElement);
 productImageRender(productThreeElement);
-productImageRender();
+
+
+
 /////////////////////////////////////////// PLAN OF ACTION ////////////////////////////////////////////////////
 
 // math.random to return a random number between 0 and rhe length of an array
