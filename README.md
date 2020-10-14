@@ -22,4 +22,4 @@ This project is about creating an app that purpose is to have a group of people 
 
 ### Acknowledgements
 
-+ JP & Kjell for helping explain things 
++ JP for a second pair of eyes 

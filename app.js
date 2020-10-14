@@ -3,21 +3,22 @@
 
 // global variables
 
-var totalVotes = 0; // added from code review 10/13
+var totalVotes = 0; // added 10/13
 var productOneElement = document.getElementById('image-one');  // first product image
 var productTwoElement = document.getElementById('image-two');  // second product image
 var productThreeElement = document.getElementById('image-three');  // third product image 
-var recentRandomNumbers = [];
+var button = document.createElement('BUTTON');  //views button
 var allProduct = [];
-var button = document.createElement('BUTTON');
+var recentRandomNumbers = [];
+var maximumClicks = 25;  //max amount of clicks
 
 
-// constructor function (Product)
-function Product(filepath, imageName) {
+// constructor function (Product objects)
+function Product(filepath, name) {
     this.filepath = filepath;  /// file path for images 
-    this.name = imageName;   /// image description
+    this.name = name;   /// image description
     this.votes = 0;  // vote counter
-    this.views = 0;  // views counter // added from code review 10/13 
+    this.views = 0;  // views counter 
 
     allProduct.push(this);
 }
@@ -44,18 +45,19 @@ new Product('img/img/usb.gif', 'usb');
 new Product('img/img/water-can.jpg', 'water-can');
 new Product('img/img/wine-glass.jpg', 'wine-glass');
 
-//console.log(allProduct);
+console.log(allProduct);
 
 
 // render function
 
-function productImageRender(imageElement) {  //good
-    var randomProductIndex = getRandomNumber(0, allProduct.length - 1);  // good
+function productImageRender(imageElement) {  //working
+
+    var randomProductIndex = getRandomNumber(0, allProduct.length - 1);  //working
 
 
     // this makes sure we have a unique image
     while (recentRandomNumbers.includes(randomProductIndex)) {
-        randomProductIndex = getRandomNumber(0, allProduct.length - 1); //good
+        randomProductIndex = getRandomNumber(0, allProduct.length - 1); //working
         //console.log(randomProductIndex);
     }
 
@@ -65,18 +67,14 @@ function productImageRender(imageElement) {  //good
 
     // views
     allProduct[randomProductIndex].views++; // added 10/13
-
+    recentRandomNumbers.push(randomProductIndex);
     if (recentRandomNumbers.length > 5) { //  added 10/13
         recentRandomNumbers.shift();
     }
 
-
 }
 
-
-// helper functions////////////// find a random number within a range
-// random number function generator
-
+// helper functions
 function getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
@@ -87,7 +85,7 @@ function handleClick(event) {
 
     for (var i = 0; i < allProduct.length; i++) {
         if (selectedProduct === allProduct[i].name) {
-            // console.log('increased votes for ', allProduct[i].name);
+
             allProduct[i].votes++;
         }
     }
@@ -99,18 +97,18 @@ function handleClick(event) {
 
     // increment total votes
     totalVotes++;
-    if (totalVotes >= 25) {
+    if (totalVotes >= maximumClicks) {
         document.getElementById('product-container').removeEventListener('click', handleClick); //removes event listener
-        // display results 
-        renderViewsButton();
-        // ul element is the parent on html
+
+        renderChart();
+
+
     }
 }
 function renderViewsButton() {
     button.innerHTML = 'View Results';
     document.body.appendChild(button);
 }
-
 
 button.addEventListener('click', getResultsClick);
 function getResultsClick(event) {
@@ -125,6 +123,80 @@ function getResultsClick(event) {
     }
 }
 
+// generate chart
+function makeProductChart() {
+    var products = [];
+    for (var i = 0; i < allProduct.length; i++) {
+        products.push(allProduct[i].name);
+    }
+
+    var votes = [];
+    for (var i = 0; i < allProduct.length; i++) {
+        votes.push(allProduct[i].votes);
+
+    }
+    var views = [];
+    for (var i = 0; i < allProduct.length; i++) {
+        views.push(allProduct[i].views);
+    }
+    return [products, votes, views];
+}
+
+
+// render chart data
+
+function renderChart() {
+    var chartData = makeProductChart();
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+
+
+    var votesOne = {
+        label: 'Number of votes', // title
+        data: chartData[1],  // # of votes
+
+        backgroundColor:
+            'rgba(69, 124, 211, 1)',
+
+        borderWidth: 1,
+        yAxisID: "y-axis-votes"
+    };
+
+
+    var viewsOne = {
+        label: 'number of views',
+        data: chartData[2],
+        backgroundColor:
+            'rgba(166, 69, 211, 1)',
+
+        borderWidth: 1,
+        yAxisID: "y-axis-votes"
+    };
+
+    var productTitle = {
+        labels: chartData[0],
+        datasets: [votesOne, viewsOne],
+    };
+    var chartOptions = {
+        scales: {
+            yAxes: [{
+                id: "y-axis-votes"
+
+            }],
+            ticks: {
+                beginAtZero: true
+            }
+        }
+
+    }
+
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: productTitle,
+        options: chartOptions
+    })
+}
 
 // set up event listener - image clicks
 
@@ -135,93 +207,45 @@ productImageRender(productTwoElement);
 productImageRender(productThreeElement);
 
 
-////notes
 
-//loop over our allProducts array
-//create an li
-// fill it with content
-// append to the parent
+            /////////////////////////////////////////// PLAN OF ACTION ////////////////////////////////////////////////////
 
+            // math.random to return a random number between 0 and rhe length of an array
+            // use number to be index for allImages array
+            // imageOneElement.src = allImages[randomNumber];
 
-// iterate over allProducts array and create a products name array for my labels
-// same thing but for votes go in data
-// another for views maybe
+            // Goal: render 3 images to dom
+            // allow user to vote on which image they like best
+            // keep track of votes
+            // give user 25 selections
+            //keep track of views
 
-//// add charts
+            // do this three times
+            // go to my index and select img tag
+            // fill img tag with content 
+            // append to dom
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// // event listener  // listen for click
-// productContainer.addEventListener('click', function (event) {
-
-//     // add view results button 
-//     // make 3 images go away and bring 3 new images in 
-//     productImageRender(productOneElement);
-//     productImageRender(productTwoElement);
-//     productImageRender(productThreeElement);
-
-    // tracking votes // loop over product array and see if title matches 
-
-    // var selectedProduct = event.target.title;
-
-    // for (var i = 0; i < allProduct.length; i++) {
-    //     if (selectedProduct === allProduct[i].name) {
-    //         console.log('increased votes for ', allProduct[i].name);
-    //         allProduct[i].votes++;
-    //     }
-    // }
-
-    // if else statement to generate count of numbers 
-
-
-    // figure out which product was clicked on and increase votes
-// })
+            // I am going to create a constructor function and make image objects
+            // filepath that will be src
+            // name that will be alt and my title
 
 
 
-// productImageRender(productOneElement);
-// productImageRender(productTwoElement);
-// productImageRender(productThreeElement);
+            // when a user clicks on an image I need all 3 to go away and come up with 3 new images that they didnt just see
+            // I need an event listener on the parent of all 3 images
+            // listen on the image counter for a click
+            // callback function to make all 3 images go away, and make 3 more images appear
 
+            // user should get 25 rounds of voting 
 
+            // keep number of rounds in a variable to allow number to be easily changed
 
+            // button with view results which when clicked displays the list of products followed by votes received and number of timed seen
 
+            ////notes
 
-
-
-/////////////////////////////////////////// PLAN OF ACTION ////////////////////////////////////////////////////
-
-// math.random to return a random number between 0 and rhe length of an array
-// use number to be index for allImages array
-// imageOneElement.src = allImages[randomNumber];
-
-// Goal: render 3 images to dom
-// allow user to vote on which image they like best
-// keep track of votes
-// give user 25 selections
-//keep track of views
-
-// do this three times
-// go to my index and select img tag
-// fill img tag with content 
-// append to dom
-
-// I am going to create a constructor function and make image objects
-// filepath that will be src
-// name that will be alt and my title
-
-
-
-// when a user clicks on an image I need all 3 to go away and come up with 3 new images that they didnt just see
-// I need an event listener on the parent of all 3 images
-// listen on the image counter for a click
-// callback function to make all 3 images go away, and make 3 more images appear
-
-// user should get 25 rounds of voting 
-
-// keep number of rounds in a variable to allow number to be easily changed
-
-// button with view results which when clicked displays the list of products followed by votes received and number of timed seen
+            //loop over our allProducts array
+            //create an li
+            // fill it with content
+            // append to the parent
 
