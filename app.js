@@ -14,11 +14,14 @@ var maximumClicks = 25;  //max amount of clicks
 
 
 // constructor function (Product objects)
-function Product(filepath, name) {
+function Product(filepath, name, votes = 0, views = 0) {  // (parameters added votes, views = 0 here)
     this.filepath = filepath;  /// file path for images 
     this.name = name;   /// image description
-    this.votes = 0;  // vote counter
-    this.views = 0;  // views counter 
+    this.votes = votes;  // vote counter  // added votes = votes for local storage
+    this.views = views;  // views counter // added views = views local storage
+    // this.votes = 0  // old code
+    // this.views = 0 // old code
+    // add something here for constructor function to go through for JSON 
 
     allProduct.push(this);
 }
@@ -44,8 +47,63 @@ new Product('img/img/unicorn.jpg', 'unicorn');
 new Product('img/img/usb.gif', 'usb');
 new Product('img/img/water-can.jpg', 'water-can');
 new Product('img/img/wine-glass.jpg', 'wine-glass');
+//console.log(allProduct);
+//console.log('1. my all Product array:', allProduct);
 
-console.log(allProduct);
+////////Local storage ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// var stringifyProducts = JSON.stringify(allProduct);
+
+// //console.log('2. my all Product array as JSON', stringifyProducts);
+
+// localStorage.setItem('product', stringifyProducts);
+
+function checkLocalStorage() {
+    var productFromLocalStorage = localStorage.getItem('product');
+    //console.log('3. product from local storage', productFromLocalStorage);
+
+    if (productFromLocalStorage) {
+
+        var parseProduct = JSON.parse(productFromLocalStorage);
+        //console.log('4. parsed product from local storage:', parseProduct);
+
+        for (var i = 0; i < parseProduct.length; i++) {
+
+            new Product(parseProduct[i].name, parseProduct[i].filepath, parseProduct[i].votes, parseProduct[i].views);
+
+            //console.log('parseProducts[i].name', parseProduct[i].name);
+        }
+    } else {
+        generateNewObjectInstances();
+    }
+}
+// step 2. put my JSON into local storage
+// works by taking 2 value - a key and value
+// key is whatever you want, value is the jSON you are putting in local storage
+
+// step 3. get product out of local storage
+// getItems - just takes the key
+// step 4. parse product array that I got back 
+
+// goal for local storage:
+// goal track totals between page refresh so that I can track the number of votes
+// store products array into local storage as JSON string
+// retrieve product from local storage and utilize json.parse() function
+// you will have to send each item in array through constructor function
+
+// 4 functions
+// 1 to check for local storage
+
+// function checkForLocalStorage() {
+
+// }
+
+// 1 to retrieve from local storage takes in a key and value  
+// key is what you want, value is the jSON you are putting in LS
+// 1 to rebuild 
+// 1 to save local storage
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 // render function
@@ -70,6 +128,15 @@ function productImageRender(imageElement) {  //working
     recentRandomNumbers.push(randomProductIndex);
     if (recentRandomNumbers.length > 5) { //  added 10/13
         recentRandomNumbers.shift();
+
+
+
+        //// storage array prep spot 
+        /// push local storage spot
+        var stringifyProducts = JSON.stringify(allProduct);      // added for local storage 10/14
+        //console.log('2. my all Product array as JSON', stringifyProducts);   // added for local storage 10/14
+        localStorage.setItem('product', stringifyProducts);   // added for local storage 10/14
+
     }
 
 }
@@ -105,6 +172,15 @@ function handleClick(event) {
 
     }
 }
+
+// //// storage array prep spot 
+// /// push local storage spot
+// var stringifyProducts = JSON.stringify(allProduct);      // added for local storage 10/14
+// console.log('2. my all Product array as JSON', stringifyProducts);   // added for local storage 10/14
+// localStorage.setItem('product', stringifyProducts);   // added for local storage 10/14
+
+
+// render 
 function renderViewsButton() {
     button.innerHTML = 'View Results';
     document.body.appendChild(button);
@@ -205,6 +281,9 @@ document.getElementById('product-container').addEventListener('click', handleCli
 productImageRender(productOneElement);
 productImageRender(productTwoElement);
 productImageRender(productThreeElement);
+
+
+
 
 
 
