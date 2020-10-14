@@ -3,13 +3,23 @@
     background-color: lavender;
 }
 
+header{
+    font-size: 60px;
+    color: rebeccapurple;
+    text-align: center;
+    font-family: 'Overpass', sans-serif;
+ 
+}
+
 img {
+    display: inline-block;
+    padding: 20px;
     width: 400px;
     height: 400px;
+    border: 6px solid rebeccapurple;
+   margin-left: 40px;
+   margin-top: 40px;
 
 }
 
 
-canvas{
-    border: 1px solid purple;
-}

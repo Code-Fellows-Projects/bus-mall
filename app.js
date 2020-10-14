@@ -143,76 +143,59 @@ function makeProductChart() {
 }
 
 
-//// add charts
-function renderChart() {
+// render chart data
 
+function renderChart() {
     var chartData = makeProductChart();
+
     var ctx = document.getElementById('myChart').getContext('2d');
+
+
+
+    var votesOne = {
+        label: 'Number of votes', // title
+        data: chartData[1],  // # of votes
+
+        backgroundColor:
+            'rgba(69, 124, 211, 1)',
+
+        borderWidth: 1,
+        yAxisID: "y-axis-votes"
+    };
+
+
+    var viewsOne = {
+        label: 'number of views',
+        data: chartData[2],
+        backgroundColor:
+            'rgba(166, 69, 211, 1)',
+
+        borderWidth: 1,
+        yAxisID: "y-axis-votes"
+    };
+
+    var productTitle = {
+        labels: chartData[0],
+        datasets: [votesOne, viewsOne],
+    };
+    var chartOptions = {
+        scales: {
+            yAxes: [{
+                id: "y-axis-votes"
+
+            }],
+            ticks: {
+                beginAtZero: true
+            }
+        }
+
+    }
 
     var myChart = new Chart(ctx, {
         type: 'bar',
-        data: {
-            labels: chartData[0], // products go here
-            datasets: [{
-                label: '# of votes', // title
-                data: chartData[1],  // # of votes
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 2
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
+        data: productTitle,
+        options: chartOptions
+    })
 }
 
 // set up event listener - image clicks
@@ -225,44 +208,44 @@ productImageRender(productThreeElement);
 
 
 
-/////////////////////////////////////////// PLAN OF ACTION ////////////////////////////////////////////////////
+            /////////////////////////////////////////// PLAN OF ACTION ////////////////////////////////////////////////////
 
-// math.random to return a random number between 0 and rhe length of an array
-// use number to be index for allImages array
-// imageOneElement.src = allImages[randomNumber];
+            // math.random to return a random number between 0 and rhe length of an array
+            // use number to be index for allImages array
+            // imageOneElement.src = allImages[randomNumber];
 
-// Goal: render 3 images to dom
-// allow user to vote on which image they like best
-// keep track of votes
-// give user 25 selections
-//keep track of views
+            // Goal: render 3 images to dom
+            // allow user to vote on which image they like best
+            // keep track of votes
+            // give user 25 selections
+            //keep track of views
 
-// do this three times
-// go to my index and select img tag
-// fill img tag with content 
-// append to dom
+            // do this three times
+            // go to my index and select img tag
+            // fill img tag with content 
+            // append to dom
 
-// I am going to create a constructor function and make image objects
-// filepath that will be src
-// name that will be alt and my title
+            // I am going to create a constructor function and make image objects
+            // filepath that will be src
+            // name that will be alt and my title
 
 
 
-// when a user clicks on an image I need all 3 to go away and come up with 3 new images that they didnt just see
-// I need an event listener on the parent of all 3 images
-// listen on the image counter for a click
-// callback function to make all 3 images go away, and make 3 more images appear
+            // when a user clicks on an image I need all 3 to go away and come up with 3 new images that they didnt just see
+            // I need an event listener on the parent of all 3 images
+            // listen on the image counter for a click
+            // callback function to make all 3 images go away, and make 3 more images appear
 
-// user should get 25 rounds of voting 
+            // user should get 25 rounds of voting 
 
-// keep number of rounds in a variable to allow number to be easily changed
+            // keep number of rounds in a variable to allow number to be easily changed
 
-// button with view results which when clicked displays the list of products followed by votes received and number of timed seen
+            // button with view results which when clicked displays the list of products followed by votes received and number of timed seen
 
-////notes
+            ////notes
 
-//loop over our allProducts array
-//create an li
-// fill it with content
-// append to the parent
+            //loop over our allProducts array
+            //create an li
+            // fill it with content
+            // append to the parent
 
