@@ -131,10 +131,9 @@ function productImageRender(imageElement) {  //working
 
 
 
-        //// storage array prep spot 
-        /// push local storage spot
+        /// push into local storage 
         var stringifyProducts = JSON.stringify(allProduct);      // added for local storage 10/14
-        //console.log('2. my all Product array as JSON', stringifyProducts);   // added for local storage 10/14
+        //console.log('2. my all Product array as JSON', stringifyProducts);   
         localStorage.setItem('product', stringifyProducts);   // added for local storage 10/14
 
     }
@@ -172,12 +171,6 @@ function handleClick(event) {
 
     }
 }
-
-// //// storage array prep spot 
-// /// push local storage spot
-// var stringifyProducts = JSON.stringify(allProduct);      // added for local storage 10/14
-// console.log('2. my all Product array as JSON', stringifyProducts);   // added for local storage 10/14
-// localStorage.setItem('product', stringifyProducts);   // added for local storage 10/14
 
 
 // render 

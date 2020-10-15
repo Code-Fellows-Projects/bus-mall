@@ -1,14 +1,23 @@
 
 *{
     background-color: lavender;
+    width: 1500px;
 }
 
 header{
     font-size: 60px;
     color: rebeccapurple;
-    text-align: center;
-    font-family: 'Overpass', sans-serif;
+    text-align: left;
+    right: 20px;
+    font-family: 'Anton', sans-serif;
+    
  
+}
+
+p {
+    text-align: center;
+    font-size: 20px;
+    /* border: 2px solid purple; */
 }
 
 img {
@@ -23,3 +32,7 @@ img {
 }
 
 
+footer{
+    text-align: center;
+    font-size: 20px;
+}
