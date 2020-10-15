@@ -52,12 +52,6 @@ new Product('img/img/wine-glass.jpg', 'wine-glass');
 
 ////////Local storage ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// var stringifyProducts = JSON.stringify(allProduct);
-
-// //console.log('2. my all Product array as JSON', stringifyProducts);
-
-// localStorage.setItem('product', stringifyProducts);
-
 function checkLocalStorage() {
     var productFromLocalStorage = localStorage.getItem('product');
     //console.log('3. product from local storage', productFromLocalStorage);
@@ -90,14 +84,7 @@ function checkLocalStorage() {
 // store products array into local storage as JSON string
 // retrieve product from local storage and utilize json.parse() function
 // you will have to send each item in array through constructor function
-
-// 4 functions
-// 1 to check for local storage
-
-// function checkForLocalStorage() {
-
-// }
-
+// loop over all object literals and create object instances
 // 1 to retrieve from local storage takes in a key and value  
 // key is what you want, value is the jSON you are putting in LS
 // 1 to rebuild 
@@ -131,7 +118,12 @@ function productImageRender(imageElement) {  //working
 
 
 
+<<<<<<< HEAD
         /// push into local storage 
+=======
+        //// storage array stringify
+        /// push local storage
+>>>>>>> 22fb9ae839802966ab83f685ee1a0507bd11e07b
         var stringifyProducts = JSON.stringify(allProduct);      // added for local storage 10/14
         //console.log('2. my all Product array as JSON', stringifyProducts);   
         localStorage.setItem('product', stringifyProducts);   // added for local storage 10/14
