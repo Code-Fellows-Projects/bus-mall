@@ -118,12 +118,8 @@ function productImageRender(imageElement) {  //working
 
 
 
-<<<<<<< HEAD
-        /// push into local storage 
-=======
         //// storage array stringify
         /// push local storage
->>>>>>> 22fb9ae839802966ab83f685ee1a0507bd11e07b
         var stringifyProducts = JSON.stringify(allProduct);      // added for local storage 10/14
         //console.log('2. my all Product array as JSON', stringifyProducts);   
         localStorage.setItem('product', stringifyProducts);   // added for local storage 10/14
