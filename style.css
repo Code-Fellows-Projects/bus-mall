@@ -14,9 +14,11 @@ header{
  
 }
 
-p {
+.header p {
     text-align: center;
     font-size: 20px;
+    color: rebeccapurple;
+    font-family: 'Anton', sans-serif;
     /* border: 2px solid purple; */
 }
 
@@ -35,6 +37,9 @@ img {
 footer{
     text-align: center;
     font-size: 20px;
+    color: rebeccapurple;
+    font-family: 'Anton', sans-serif;
+
 }
 
 
