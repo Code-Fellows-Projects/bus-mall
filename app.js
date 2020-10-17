@@ -25,29 +25,30 @@ function Product(filepath, name, votes = 0, views = 0) {  // (parameters added v
 }
 
 // object instances  //// with filepath, file name
-new Product('img/img/bag.jpg', 'bag');
-new Product('img/img/banana.jpg', 'banana');
-new Product('img/img/bathroom.jpg', 'bathroom');
-new Product('img/img/boots.jpg', 'boots');
-new Product('img/img/breakfast.jpg', 'breakfast');
-new Product('img/img/bubblegum.jpg', 'bubblegum');
-new Product('img/img/chair.jpg', 'chair');
-new Product('img/img/cthulhu.jpg', 'cthulhu');
-new Product('img/img/dog-duck.jpg', 'dog-duck');
-new Product('img/img/dragon.jpg', 'dragon');
-new Product('img/img/pen.jpg', 'pen');
-new Product('img/img/pet-sweep.jpg', 'pet-sweep');
-new Product('img/img/scissors.jpg', 'scissors');
-new Product('img/img/shark.jpg', 'shark');
-new Product('img/img/sweep.png', 'sweep');
-new Product('img/img/tauntaun.jpg', 'tauntaun');
-new Product('img/img/unicorn.jpg', 'unicorn');
-new Product('img/img/usb.gif', 'usb');
-new Product('img/img/water-can.jpg', 'water-can');
-new Product('img/img/wine-glass.jpg', 'wine-glass');
-//console.log(allProduct);
-//console.log('1. my all Product array:', allProduct);
-
+function generateNewObjectInstances() {
+  new Product('img/img/bag.jpg', 'bag');
+  new Product('img/img/banana.jpg', 'banana');
+  new Product('img/img/bathroom.jpg', 'bathroom');
+  new Product('img/img/boots.jpg', 'boots');
+  new Product('img/img/breakfast.jpg', 'breakfast');
+  new Product('img/img/bubblegum.jpg', 'bubblegum');
+  new Product('img/img/chair.jpg', 'chair');
+  new Product('img/img/cthulhu.jpg', 'cthulhu');
+  new Product('img/img/dog-duck.jpg', 'dog-duck');
+  new Product('img/img/dragon.jpg', 'dragon');
+  new Product('img/img/pen.jpg', 'pen');
+  new Product('img/img/pet-sweep.jpg', 'pet-sweep');
+  new Product('img/img/scissors.jpg', 'scissors');
+  new Product('img/img/shark.jpg', 'shark');
+  new Product('img/img/sweep.png', 'sweep');
+  new Product('img/img/tauntaun.jpg', 'tauntaun');
+  new Product('img/img/unicorn.jpg', 'unicorn');
+  new Product('img/img/usb.gif', 'usb');
+  new Product('img/img/water-can.jpg', 'water-can');
+  new Product('img/img/wine-glass.jpg', 'wine-glass');
+  //console.log(allProduct);
+  //console.log('1. my all Product array:', allProduct);
+}
 ////////Local storage ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function checkLocalStorage() {
@@ -61,7 +62,7 @@ function checkLocalStorage() {
 
     for (var i = 0; i < parseProduct.length; i++) {
 
-      new Product(parseProduct[i].name, parseProduct[i].filepath, parseProduct[i].votes, parseProduct[i].views);
+      new Product(parseProduct[i].filepath, parseProduct[i].name, parseProduct[i].votes, parseProduct[i].views);
 
       //console.log('parseProducts[i].name', parseProduct[i].name);
     }
@@ -99,11 +100,6 @@ function productImageRender(imageElement) {  //working
 
 
 
-    //// storage array stringify
-    /// push local storage
-    var stringifyProducts = JSON.stringify(allProduct);      // added for local storage 10/14
-    //console.log('2. my all Product array as JSON', stringifyProducts);   
-    localStorage.setItem('product', stringifyProducts);   // added for local storage 10/14
 
   }
 
@@ -137,6 +133,11 @@ function handleClick(event) {
 
     renderChart();
 
+
+    /// push local storage
+    var stringifyProducts = JSON.stringify(allProduct);      // added for local storage 10/14
+    //console.log('2. my all Product array as JSON', stringifyProducts);   
+    localStorage.setItem('product', stringifyProducts);   // added for local storage 10/14
 
   }
 }
@@ -239,7 +240,7 @@ function renderChart() {
 // set up event listener - image clicks
 
 document.getElementById('product-container').addEventListener('click', handleClick);
-
+checkLocalStorage();
 productImageRender(productOneElement);
 productImageRender(productTwoElement);
 productImageRender(productThreeElement);
