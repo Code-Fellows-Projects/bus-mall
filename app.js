@@ -98,9 +98,6 @@ function productImageRender(imageElement) {  //working
   if (recentRandomNumbers.length > 5) { //  added 10/13
     recentRandomNumbers.shift();
 
-
-
-
   }
 
 }
